@@ -3,7 +3,7 @@ import base64
 import json
 import os
 import time
-from const import Constants
+from .const import Constants
 
 # Get auth token using curl
 # API_USER = ''
@@ -21,17 +21,20 @@ class TokenManager:
     def __new__(cls, *args, **kwargs):
         if cls._instance is None:
             cls._instance = super(TokenManager, cls).__new__(cls, *args, **kwargs)
-            cls.token = None
+            cls._instance._initialize()
         return cls._instance
+    
+    def _initialize(self):
+        self.username, self.password = _get_userpass()
+        self.token = None
 
     def _get_new_token(self):
         # I am ignoring SMRT Link's refresh token feature for now.
-        username, password = _get_userpass()
-        self.token, token_seconds = _get_smrtlink_auth_token(username, password)
+        self.token, token_seconds = _get_smrtlink_auth_token(self.username, self.password)
         self.token_expiry = time.time() + token_seconds
 
     def get_token(self):
-        if self.token is None or time.time() >= self.token_expiry:
+        if self.token is None or time.time() >= self.token_expiry: # TODO: verify this logic
             self._get_new_token()
         return self.token
 
@@ -62,14 +65,15 @@ def _get_smrtlink_auth_token(username, password):
     return access_token, expires_in
 
 def _get_userpass():
-    # TODO: is the app user really pacbiodnaseq? 
+    # TODO: is the app user really pacbiodnaseq?
     # user is either pacbiodnaseq or the current user. All users should
     # already be SMRT Link users
     username = os.environ['USER']
     credentials = None
     if username == 'pacbiodnaseq':
-        with open('/home/pacbiodnaseq/credentials.json') as f:
-            credentials = json.load(f)
+        if os.path.isfile('/home/pacbiodnaseq/credentials.json'):
+            with open('/home/pacbiodnaseq/credentials.json') as f:
+                credentials = json.load(f)
     else: 
         # prompt for username and password
         password = input("Enter your SMRT Link password: ")
