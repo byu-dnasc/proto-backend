@@ -8,7 +8,7 @@ def _get_endpoint(api_path, access_token):
         # status URL is on a different endpoint than the other services
         api_url = Constants.STATUS_URL
     headers = {
-        'Authorization': f'Bearer {access_token}',
+        'Authorization': 'Bearer ' + access_token,
         'Content-type': 'application/json' 
     }
     # verify=False causes warnings from urllib3. 
@@ -38,6 +38,15 @@ class SmrtClient:
     def get_dataset_by_id(self, dataset_id):
         # dataset_id could be the uuid or the id
         return _get_endpoint(f'/datasets/search/{dataset_id}', self._get_token())
+    
+    def get_ccsreads(self):
+        return _get_endpoint('/datasets/ccsreads', self._get_token())
+
+    def get_subreads(self):
+        return _get_endpoint('/datasets/subreads', self._get_token())
+    
+    def get_dataset_reports(self, dataset_id):
+        return _get_endpoint(f'/datasets/ccsreads/{dataset_id}/reports', self._get_token())
 
     def import_fastx(self, file_path):
         # Upon further examination, is think this is the API
