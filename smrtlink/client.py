@@ -1,28 +1,44 @@
 from .const import Constants
+from .auth import TokenManager
 import requests
 import urllib3
 
-def _get_endpoint(api_path, access_token):
+def _get_url(api_path):
     api_url = Constants.SERVICES_EP_BASE + api_path
     if api_path == '/status':
         # status URL is on a different endpoint than the other services
         api_url = Constants.STATUS_URL
-    headers = {
+    return api_url
+
+def _get_headers(access_token):
+    if access_token is None:
+        return None
+    return {
         'Authorization': 'Bearer ' + access_token,
         'Content-type': 'application/json' 
     }
-    # verify=False causes warnings from urllib3. 
-    # warnings are disabled elsewhere in the package
-    response = requests.get(api_url, headers=headers, verify=False)
+ 
+def _get_endpoint(api_path, access_token):
+    try:
+        response = requests.get(url=_get_url(api_path), 
+                                headers=_get_headers(access_token), 
+                                verify=False)
+        # verify=False causes warnings from urllib3. 
+        # warnings are disabled by SmrtClient.__init__
+    except requests.exceptions.ConnectionError:
+        raise Exception('Could not connect to SMRT Link server')
     response.raise_for_status()
     return response.json()
 
 class SmrtClient:
 
-    def __init__(self, token_manager):
-        self.token_manager = token_manager
+    def __init__(self):
+        self.token_manager = None
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning) # see _get_endpoint
-    
+        j = self.get_status()
+        if j['status'] == 'OK':
+            self.token_manager = TokenManager()
+
     def _get_token(self):
         return self.token_manager.get_token()
     
@@ -33,6 +49,8 @@ class SmrtClient:
         return _get_endpoint('/projects', self._get_token())
     
     def get_status(self):
+        if self.token_manager is None:
+            return _get_endpoint('/status', None)
         return _get_endpoint('/status', self._get_token())
     
     def get_dataset_by_id(self, dataset_id):
