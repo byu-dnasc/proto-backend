@@ -25,12 +25,16 @@ class TokenManager:
         return cls._instance
     
     def _initialize(self):
-        self.username, self.password = _get_userpass()
+        try:
+            self.username, self.password = _get_userpass()
+        except Exception as e:
+            print('Failed to get username and password: ' + str(e))
+            exit(1)
         self.token = None
 
     def _get_new_token(self):
         # I am ignoring SMRT Link's refresh token feature for now.
-        self.token, token_seconds = _get_smrtlink_auth_token(self.username, self.password)
+        self.token, token_seconds = _get_smrtlink_access_token(self.username, self.password)
         self.token_expiry = time.time() + token_seconds
 
     def get_token(self):
@@ -41,7 +45,7 @@ class TokenManager:
 def _create_auth(secret, consumer_key):
     return base64.b64encode(":".join([secret, consumer_key]).encode("utf-8"))
 
-def _get_token(url, user, password):
+def _request_token(url, user, password):
     scopes = ["welcome", "run-design", "run-qc", "openid", "analysis", "sample-setup", "data-management", "userinfo"]
     basic_auth = _create_auth("KMLz5g7fbmx8RVFKKdu0NOrJic4a", "6NjRXBcFfLZOwHc0Xlidiz4ywcsa").decode("utf-8")
     headers = {
@@ -56,28 +60,44 @@ def _get_token(url, user, password):
     # verify is false to disable the SSL cert verification
     return requests.post(url, payload, headers=headers, verify=False)
 
-def _get_smrtlink_auth_token(username, password):
-    r = _get_token(Constants.TOKEN_URL, username, password)
-    r.raise_for_status()
+def _get_smrtlink_access_token(username, password):
+    r = _request_token(Constants.TOKEN_URL, username, password)
+    try:
+        r.raise_for_status()
+    except Exception as e:
+        print('Authentication failed: ' + str(e))
+        exit(1)
     j = r.json()
     access_token = j['access_token']
     expires_in = j['expires_in']
     return access_token, expires_in
 
 def _get_userpass():
-    # TODO: is the app user really pacbiodnaseq?
-    # user is either pacbiodnaseq or the current user. All users should
-    # already be SMRT Link users
+    # returns two strings: username, password
     username = os.environ['USER']
-    credentials = None
-    if username == 'pacbiodnaseq':
-        if os.path.isfile('/home/pacbiodnaseq/credentials.json'):
-            with open('/home/pacbiodnaseq/credentials.json') as f:
-                credentials = json.load(f)
-    else: 
-        # prompt for username and password
-        password = input("Enter your SMRT Link password: ")
-        credentials = {'username': username, 'password': password}
-    if credentials is None:
-        raise Exception("Could not get credentials")
-    return credentials['username'], credentials['password']
+    password = None
+    if username == 'dnascapp':
+        password = _read_password()
+    else:
+        password = _prompt_user_for_password(username)
+    return username, password
+
+def _read_password():
+    e_message = 'Could not read password: '
+    if os.path.isfile('/home/dnascapp/credentials.json'):
+        with open('/home/dnascapp/credentials.json') as f:
+            j = json.load(f)
+            # check that file contains the correct key
+            if 'SMRT Link Password' in j:
+                return j['SMRT Link Password']
+            else:
+                raise Exception(e_message + '/home/dnascapp/credentials.json missing key "SMRT Link Password".')
+    else:
+        raise Exception(e_message + '/home/dnascapp/credentials.json does not exist.')
+
+def _prompt_user_for_password(username):
+    prompt = f'Enter the SMRT Link password for {username}, or exit and run as dnascapp: '
+    password = input(prompt)
+    if password == '':
+        raise Exception(f'No password entered for {username}.')
+    return password
