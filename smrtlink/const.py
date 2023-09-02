@@ -4,4 +4,5 @@ class Constants:
     SERVICES_EP_BASE = SERVER_EP + '/smrt-link'
     STATUS_URL = SERVER_EP + '/status'
     TOKEN_URL = f'https://{HOSTNAME}:8243/SMRTLink/1.0.0/token'
-
+    scopes = ['welcome', 'run-design', 'run-qc', 'openid', 'analysis', 'sample-setup', 'data-management', 'userinfo']
+    SCOPE = ' '.join({s for s in scopes})
