@@ -8,10 +8,10 @@ from .const import Constants
 # Get auth token using curl
 # API_USER = ''
 # API_PASS = ''
-# AUTH_TOKEN=$(curl -k -s --user KMLz5g7fbmx8RVFKKdu0NOrJic4a:6NjRXBcFfLZOwHc0Xlidiz4ywcsa -d "grant_type=password&username=$API_USER&password=$API_PASS&scope=sample-setup+run-design+run-qc+data-management+analysis+userinfo+openid" https://smrt.rc.byu.edu:8243/token | ~/jq -r .access_token)
+# AUTH_TOKEN=$(curl -k -s --user KMLz5g7fbmx8RVFKKdu0NOrJic4a:6NjRXBcFfLZOwHc0Xlidiz4ywcsa -d 'grant_type=password&username=$API_USER&password=$API_PASS&scope=sample-setup+run-design+run-qc+data-management+analysis+userinfo+openid' https://smrt.rc.byu.edu:8243/token | ~/jq -r .access_token)
 
 # Make API call using curl and auth token
-# curl -k -s -H "Authorization: Bearer $AUTH_TOKEN" http://localhost:9091/smrt-link/project
+# curl -k -s -H 'Authorization: Bearer $AUTH_TOKEN' http://localhost:9091/smrt-link/project
 
 class TokenManager:
     # token manager is a singleton which maintains an up-to-date token
@@ -25,43 +25,59 @@ class TokenManager:
         return cls._instance
     
     def _initialize(self):
+        username, password = _get_userpass()
+        authentication_params = _password_authentication(username, password)
         try:
-            self.username, self.password = _get_userpass()
+            self.token, self.refresh_token, token_seconds = _get_tokens(authentication_params)
+            self.token_expiration = time.time() + token_seconds
         except Exception as e:
-            print('Failed to get username and password: ' + str(e))
+            print('Failed to get token: ' + str(e))
             exit(1)
-        self.token = None
-
-    def _get_new_token(self):
-        # I am ignoring SMRT Link's refresh token feature for now.
-        self.token, token_seconds = _get_smrtlink_access_token(self.username, self.password)
-        self.token_expiry = time.time() + token_seconds
+    
+    def _refresh_token(self):
+        authentication_params = _refresh_authentication(self.refresh_token)
+        try:
+            self.token, self.refresh_token, token_seconds = _get_tokens(authentication_params)
+            self.token_expiration = time.time() + token_seconds
+        except Exception as e:
+            print('Failed to refresh token: ' + str(e))
+            exit(1)
 
     def get_token(self):
-        if self.token is None or time.time() >= self.token_expiry: # TODO: verify this logic
-            self._get_new_token()
+        if time.time() >= self.token_expiration:
+            self._refresh_token()
         return self.token
 
-def _create_auth(secret, consumer_key):
-    return base64.b64encode(":".join([secret, consumer_key]).encode("utf-8"))
+def _password_authentication(username, password):
+    # dictionary of authentication parameters
+    return dict(grant_type='password',
+                username=username,
+                password=password,
+                scope=Constants.SCOPE)
 
-def _request_token(url, user, password):
-    scopes = ["welcome", "run-design", "run-qc", "openid", "analysis", "sample-setup", "data-management", "userinfo"]
-    basic_auth = _create_auth("KMLz5g7fbmx8RVFKKdu0NOrJic4a", "6NjRXBcFfLZOwHc0Xlidiz4ywcsa").decode("utf-8")
+def _refresh_authentication(refresh_token):
+    # dictionary of authentication parameters
+    return dict(grant_type='refresh_token',
+                refresh_token=refresh_token,
+                scope=Constants.SCOPE)
+
+def _get_authorization():
+    secret = 'KMLz5g7fbmx8RVFKKdu0NOrJic4a' 
+    consumer_key = '6NjRXBcFfLZOwHc0Xlidiz4ywcsa' 
+    return base64.b64encode(':'.join([secret, consumer_key]).encode('utf-8')).decode('utf-8')
+
+AUTHORIZATION = _get_authorization()
+
+def _request_token(payload):
     headers = {
-    "Authorization": "Basic {}".format(basic_auth),
-    "Content-Type": "application/x-www-form-urlencoded"
+        'Authorization': f'Basic {AUTHORIZATION}',
+        'Content-Type': 'application/x-www-form-urlencoded'
     }
-    scope_str = " ".join({s for s in scopes})
-    payload = dict(grant_type="password",
-                   username=user,
-                   password=password,
-                   scope=scope_str)
     # verify is false to disable the SSL cert verification
-    return requests.post(url, payload, headers=headers, verify=False)
+    return requests.post(Constants.TOKEN_URL, payload, headers=headers, verify=False)
 
-def _get_smrtlink_access_token(username, password):
-    r = _request_token(Constants.TOKEN_URL, username, password)
+def _get_tokens(authentication_params):
+    r = _request_token(authentication_params)
     try:
         r.raise_for_status()
     except Exception as e:
@@ -69,17 +85,22 @@ def _get_smrtlink_access_token(username, password):
         exit(1)
     j = r.json()
     access_token = j['access_token']
-    expires_in = j['expires_in']
-    return access_token, expires_in
+    refresh_token = j['refresh_token']
+    expires_in_sec = j['expires_in']
+    return access_token, refresh_token, expires_in_sec
 
 def _get_userpass():
     # returns two strings: username, password
     username = os.environ['USER']
     password = None
-    if username == 'dnascapp':
-        password = _read_password()
-    else:
-        password = _prompt_user_for_password(username)
+    try:
+        if username == 'dnascapp':
+            password = _read_password()
+        else:
+            password = _prompt_user_for_password(username)
+    except Exception as e:
+        print('Failed to get username and password: ' + str(e))
+        exit(1)
     return username, password
 
 def _read_password():
