@@ -33,11 +33,17 @@ def _get_endpoint(api_path, access_token):
 class SmrtClient:
 
     def __init__(self):
-        self.token_manager = None
+        # verify that the server is accessible
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning) # see _get_endpoint
-        j = self.get_status()
-        if j['status'] == 'OK':
+        try: 
+            self.get_status()
+        except Exception as e:
+            raise Exception('Failed to create SmrtClient: ' + str(e))
+        # initialize
+        try:
             self.token_manager = TokenManager()
+        except Exception as e:
+            raise Exception('Failed to create SmrtClient: ' + str(e))
 
     def _get_token(self):
         return self.token_manager.get_token()
@@ -49,9 +55,7 @@ class SmrtClient:
         return _get_endpoint('/projects', self._get_token())
     
     def get_status(self):
-        if self.token_manager is None:
-            return _get_endpoint('/status', None)
-        return _get_endpoint('/status', self._get_token())
+        return _get_endpoint('/status', None)
     
     def get_dataset_by_id(self, dataset_id):
         # dataset_id could be the uuid or the id

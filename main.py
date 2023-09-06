@@ -16,16 +16,15 @@ def main():
 
     smrt_client = get_smrt_client()
     if smrt_client is not None:
+        # get projects
+        projects = smrt_client.get_projects()
+        # pretty print
+        print(json.dumps(projects, indent=4))
         pass
         # do stuff
     
-    # read ccsreads.json
-    ccsreads = None
-    with open('ccsreads.json', 'r') as f:
-        ccsreads = json.load(f)
-    
-    authorizer = get_authorizer()
-    tc = get_transfer_client(authorizer)
+    #authorizer = get_authorizer()
+    #tc = get_transfer_client(authorizer)
 
     
 if __name__ == '__main__':
