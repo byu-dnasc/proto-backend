@@ -61,7 +61,7 @@ def _refresh_authentication(refresh_token):
                 scope=Constants.SCOPE)
 
 def _get_authorization():
-    secret = 'KMLz5g7fbmx8RVFKKdu0NOrJic4a' 
+    secret = 'KMLz5g7fbmx8RVFKKdu0NOrJic4a'
     consumer_key = '6NjRXBcFfLZOwHc0Xlidiz4ywcsa' 
     return base64.b64encode(':'.join([secret, consumer_key]).encode('utf-8')).decode('utf-8')
 
@@ -82,25 +82,7 @@ def _get_tokens(authentication_params):
     expires_in_sec = j['expires_in']
     return access_token, refresh_token, expires_in_sec
 
-def _get_userpass():
-    username = os.environ['USER']
-    password = None
-    if username == Constants.DNASC_APP_USERNAME:
-        try:
-            yn = input(f'Run as {Constants.DNASC_APP_USERNAME}? (y/n): ')
-        except KeyboardInterrupt:
-            print()
-            exit(1)
-        if yn.lower() == 'y':
-            try:
-                _validate_credentials_file()
-                return username, _read_password()
-            except Exception as e:
-                print(f'Failed to get {Constants.DNASC_APP_USERNAME} password: ' + str(e))
-    password = _prompt_user_for_password(username)
-    return username, password
-
-def _validate_credentials_file():
+def _valid_credentials_file_accessible():
     if os.path.isfile(Constants.CREDENTIALS_FILE_PATH):
         with open(Constants.CREDENTIALS_FILE_PATH) as f:
             j = json.load(f)
@@ -116,11 +98,32 @@ def _read_password():
         j = json.load(f)
         return j['SMRT Link Password']
 
-def _prompt_user_for_password(username):
-    prompt = f'Enter the SMRT Link password for {username}, or exit and run as {Constants.DNASC_APP_USERNAME}: '
+def _prompt_user_for_password():
     try:
-        password = getpass.getpass(prompt)
+        return getpass.getpass('Enter SMRT Link password: ')
     except KeyboardInterrupt:
         print()
         exit(1)
-    return password
+
+def _get_userpass():
+    # check if app credentials are available
+    app_credentials_available = False
+    try:
+        app_credentials_available = _valid_credentials_file_accessible()
+    except Exception as e:
+        print(f'Failed to get {Constants.DNASC_APP_USERNAME} password: ' + str(e))
+    # get credentials
+    if app_credentials_available:
+        return Constants.DNASC_APP_USERNAME, _read_password()
+    else:
+        yn = None
+        username = os.environ['USER']
+        try:
+            yn = input(f'Attempt SMRT Link authentication using credentials for {username}? (y/n): ')
+        except KeyboardInterrupt:
+            print()
+            exit(0)
+        if yn.lower() == 'y':
+            return username, _prompt_user_for_password()
+        else:
+            exit(0)
