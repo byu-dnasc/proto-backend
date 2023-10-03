@@ -8,3 +8,4 @@ $conda install sqlite
 $conda install openssl
 $conda install urllib3
 python -m pip install globus_sdk
+python -m pip install globus_sdk --upgrade
