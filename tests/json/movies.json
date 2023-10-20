@@ -1,0 +1,351 @@
+{
+    "m54336U_231006_215609": {
+        "analyses": [
+            {
+                "type": "Circular Consensus Sequencing",
+                "num_reads": 1765421,
+                "num_bases": 2339572970,
+                "dataset_id": 6311,
+                "dataset_uuid": "b55e6164-87d0-4f2b-b77d-3de194d38c4e"
+            },
+            {
+                "type": "Demultiplex Reads",
+                "dataset_id": 6312,
+                "dataset_uuid": "1c4113a3-dac0-4a57-acfb-1e0ff9c02e04",
+                "samples": [
+                    {
+                        "sample_name": "P400",
+                        "barcode_name": "bc1002--bc1002",
+                        "num_reads": 44628,
+                        "num_bases": 60810996,
+                        "dataset_id": 6318
+                    },
+                    {
+                        "sample_name": "P404",
+                        "barcode_name": "bc1003--bc1003",
+                        "num_reads": 69910,
+                        "num_bases": 95619935,
+                        "dataset_id": 6320
+                    },
+                    {
+                        "sample_name": "P405",
+                        "barcode_name": "bc1004--bc1004",
+                        "num_reads": 49388,
+                        "num_bases": 66306624,
+                        "dataset_id": 6315
+                    },
+                    {
+                        "sample_name": "P409",
+                        "barcode_name": "bc1005--bc1005",
+                        "num_reads": 169402,
+                        "num_bases": 229845264,
+                        "dataset_id": 6319
+                    },
+                    {
+                        "sample_name": "P415",
+                        "barcode_name": "bc1006--bc1006",
+                        "num_reads": 102073,
+                        "num_bases": 138700749,
+                        "dataset_id": 6313
+                    },
+                    {
+                        "sample_name": "P416",
+                        "barcode_name": "bc1007--bc1007",
+                        "num_reads": 42343,
+                        "num_bases": 56662389,
+                        "dataset_id": 6316
+                    },
+                    {
+                        "sample_name": "P420",
+                        "barcode_name": "bc1008--bc1008",
+                        "num_reads": 28054,
+                        "num_bases": 36356430,
+                        "dataset_id": 6322
+                    },
+                    {
+                        "sample_name": "A1192",
+                        "barcode_name": "bc1009--bc1009",
+                        "num_reads": 58084,
+                        "num_bases": 78542354,
+                        "dataset_id": 6314
+                    },
+                    {
+                        "sample_name": "A1194",
+                        "barcode_name": "bc1010--bc1010",
+                        "num_reads": 62781,
+                        "num_bases": 85651377,
+                        "dataset_id": 6321
+                    },
+                    {
+                        "sample_name": "A1199",
+                        "barcode_name": "bc1011--bc1011",
+                        "num_reads": 52658,
+                        "num_bases": 70907363,
+                        "dataset_id": 6317
+                    }
+                ]
+            },
+            {
+                "type": "Demultiplex Reads",
+                "dataset_id": 6338,
+                "dataset_uuid": "0caf7005-7149-4808-b84f-ae211e9d66dc",
+                "samples": [
+                    {
+                        "sample_name": "P400",
+                        "barcode_name": "bc1002--bc1050",
+                        "num_reads": 8917,
+                        "num_bases": 13101847,
+                        "dataset_id": 6348
+                    },
+                    {
+                        "sample_name": "P404",
+                        "barcode_name": "bc1003--bc1050",
+                        "num_reads": 14061,
+                        "num_bases": 20673436,
+                        "dataset_id": 6341
+                    },
+                    {
+                        "sample_name": "P405",
+                        "barcode_name": "bc1004--bc1050",
+                        "num_reads": 11395,
+                        "num_bases": 16635543,
+                        "dataset_id": 6344
+                    },
+                    {
+                        "sample_name": "P409",
+                        "barcode_name": "bc1005--bc1050",
+                        "num_reads": 29279,
+                        "num_bases": 43023075,
+                        "dataset_id": 6339
+                    },
+                    {
+                        "sample_name": "P415",
+                        "barcode_name": "bc1006--bc1050",
+                        "num_reads": 21772,
+                        "num_bases": 31990132,
+                        "dataset_id": 6346
+                    },
+                    {
+                        "sample_name": "P416",
+                        "barcode_name": "bc1007--bc1050",
+                        "num_reads": 7553,
+                        "num_bases": 11101767,
+                        "dataset_id": 6347
+                    },
+                    {
+                        "sample_name": "P420",
+                        "barcode_name": "bc1008--bc1050",
+                        "num_reads": 5049,
+                        "num_bases": 7396800,
+                        "dataset_id": 6340
+                    },
+                    {
+                        "sample_name": "A1192",
+                        "barcode_name": "bc1009--bc1050",
+                        "num_reads": 10232,
+                        "num_bases": 15034149,
+                        "dataset_id": 6345
+                    },
+                    {
+                        "sample_name": "A1194",
+                        "barcode_name": "bc1010--bc1050",
+                        "num_reads": 12002,
+                        "num_bases": 17636033,
+                        "dataset_id": 6343
+                    },
+                    {
+                        "sample_name": "A1199",
+                        "barcode_name": "bc1011--bc1050",
+                        "num_reads": 11702,
+                        "num_bases": 17142130,
+                        "dataset_id": 6342
+                    }
+                ]
+            },
+            {
+                "type": "Demultiplex Reads",
+                "dataset_id": 6349,
+                "dataset_uuid": "4cb34f21-69ad-4150-a892-4513b2303043",
+                "samples": [
+                    {
+                        "sample_name": "P400",
+                        "barcode_name": "M13_bc1002_F--M13_bc1050_R",
+                        "num_reads": 9622,
+                        "num_bases": 13815960,
+                        "dataset_id": 6351
+                    },
+                    {
+                        "sample_name": "P404",
+                        "barcode_name": "M13_bc1003_F--M13_bc1050_R",
+                        "num_reads": 14795,
+                        "num_bases": 21249201,
+                        "dataset_id": 6355
+                    },
+                    {
+                        "sample_name": "P405",
+                        "barcode_name": "M13_bc1004_F--M13_bc1050_R",
+                        "num_reads": 12096,
+                        "num_bases": 17322231,
+                        "dataset_id": 6357
+                    },
+                    {
+                        "sample_name": "P409",
+                        "barcode_name": "M13_bc1005_F--M13_bc1050_R",
+                        "num_reads": 30544,
+                        "num_bases": 43846497,
+                        "dataset_id": 6352
+                    },
+                    {
+                        "sample_name": "P415",
+                        "barcode_name": "M13_bc1006_F--M13_bc1050_R",
+                        "num_reads": 22785,
+                        "num_bases": 32705623,
+                        "dataset_id": 6356
+                    },
+                    {
+                        "sample_name": "P416",
+                        "barcode_name": "M13_bc1007_F--M13_bc1050_R",
+                        "num_reads": 8016,
+                        "num_bases": 11510557,
+                        "dataset_id": 6350
+                    },
+                    {
+                        "sample_name": "P420",
+                        "barcode_name": "M13_bc1008_F--M13_bc1050_R",
+                        "num_reads": 5480,
+                        "num_bases": 7852013,
+                        "dataset_id": 6353
+                    },
+                    {
+                        "sample_name": "A1192",
+                        "barcode_name": "M13_bc1009_F--M13_bc1050_R",
+                        "num_reads": 10963,
+                        "num_bases": 15735769,
+                        "dataset_id": 6354
+                    },
+                    {
+                        "sample_name": "A1194",
+                        "barcode_name": "M13_bc1010_F--M13_bc1050_R",
+                        "num_reads": 12901,
+                        "num_bases": 18519326,
+                        "dataset_id": 6358
+                    },
+                    {
+                        "sample_name": "A1199",
+                        "barcode_name": "M13_bc1011_F--M13_bc1050_R",
+                        "num_reads": 12223,
+                        "num_bases": 17544266,
+                        "dataset_id": 6359
+                    }
+                ]
+            }
+        ],
+        "hifi_metrics": {
+            "num_reads": 139425,
+            "num_bases": 200101443,
+            "dataset_id": 6349
+        },
+        "subreads_metrics": {
+            "num_reads": 48964913,
+            "num_bases": 91738279133,
+            "dataset_id": 6310
+        },
+        "project_id": 1,
+        "instrument": "Sequel II SQ54336U",
+        "run_name": "Slavov 10 amplicons",
+        "cell_id": "1_A01",
+        "batch_name": "Run 10.06.2023 14:32",
+        "id": "m54336U_231006_215609",
+        "updated_at": "2023-10-10T17:53:02.761Z",
+        "ingested_at": "2023-10-19T12:53:50-0600"
+    },
+    "m54336U_230916_093547": {
+        "analyses": [
+            {
+                "type": "Circular Consensus Sequencing",
+                "num_reads": 2118833,
+                "num_bases": 4738478831,
+                "dataset_id": 6193,
+                "dataset_uuid": "18224cb2-fd27-4efa-aa5d-0431bfd8af75"
+            },
+            {
+                "type": "Demultiplex Reads",
+                "dataset_id": 6194,
+                "dataset_uuid": "2e55fae0-2ef6-45c7-81af-900bd292419d",
+                "samples": [
+                    {
+                        "sample_name": "Sample 13",
+                        "barcode_name": "bc1004--bc1004",
+                        "num_reads": 989125,
+                        "num_bases": 2196223521,
+                        "dataset_id": 6195
+                    },
+                    {
+                        "sample_name": "Sample 14",
+                        "barcode_name": "bc1006--bc1006",
+                        "num_reads": 1094888,
+                        "num_bases": 2402218698,
+                        "dataset_id": 6196
+                    }
+                ]
+            }
+        ],
+        "hifi_metrics": {
+            "num_reads": 2084013,
+            "num_bases": 4598442219,
+            "dataset_id": 6194
+        },
+        "subreads_metrics": {
+            "num_reads": 64401186,
+            "num_bases": 196205051109,
+            "dataset_id": 6192
+        },
+        "project_id": 1,
+        "instrument": "Sequel II SQ54336U",
+        "run_name": "Colorado State Hemmerlein Samples 13 and 14",
+        "cell_id": "4_D01",
+        "batch_name": "Run 09.12.2023 13:38",
+        "id": "m54336U_230916_093547",
+        "updated_at": "2023-09-18T06:03:59.016Z",
+        "ingested_at": "2023-10-19T12:53:50-0600"
+    },
+    "m84100_230808_191706_s1": {
+        "analyses": [
+            {
+                "type": "Demultiplex Reads",
+                "dataset_id": 6107,
+                "dataset_uuid": "c1b76ada-2ab4-4b30-bd94-7615fe0fc0a5",
+                "samples": [
+                    {
+                        "sample_name": "UofU Black x1",
+                        "barcode_name": "default--default",
+                        "num_reads": 702146,
+                        "num_bases": 9596506502,
+                        "dataset_id": 6108
+                    }
+                ]
+            },
+            {
+                "type": "Read Segmentation and Single-Cell Iso-Seq",
+                "num_reads": 10536588,
+                "num_bases": 9247730100,
+                "dataset_id": 6215,
+                "dataset_uuid": "addc2cff-88c7-4ce3-8063-651ed34fa71f"
+            }
+        ],
+        "hifi_metrics": {
+            "num_reads": 702146,
+            "num_bases": 9596506502,
+            "dataset_id": 6107
+        },
+        "subreads_metrics": null,
+        "project_id": 1,
+        "instrument": "84100",
+        "run_name": "UofU Black x1 8-8-2023",
+        "cell_id": "1_A01",
+        "batch_name": "Run 08.08.2023 11:36",
+        "id": "m84100_230808_191706_s1",
+        "updated_at": "2023-09-19T18:40:51.374Z",
+        "ingested_at": "2023-10-19T12:53:50-0600"
+    }
+}

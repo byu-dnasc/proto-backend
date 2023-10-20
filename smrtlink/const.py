@@ -8,3 +8,12 @@ class Constants:
     SCOPE = ' '.join({s for s in scopes})
     CREDENTIALS_FILE_PATH = '/home/dnascapp/backend/credentials.json'
     DNASC_APP_USERNAME = 'dnascapp'
+    INSTRUMENTS = {
+        'Revio': [
+            '84100'
+        ],
+        'Sequel II': [
+            'Sequel II SQ54336U',
+            '64140'
+        ]
+    }

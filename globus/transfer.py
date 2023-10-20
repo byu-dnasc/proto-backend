@@ -1,9 +1,12 @@
 import globus_sdk
+from globus.auth import get_authorizer
 
 GUEST_COLLECTION_ID = "b550603b-7baa-43fa-b380-939d15549345" # DNASC
 IDENTITY_ID = "19ff6717-c44d-4ab4-983c-1eb2095beba4" # aknaupp@byu.edu
+ACL_CREATION_SCOPE='urn:globus:auth:scope:transfer.api.globus.org:all'
 
-def get_transfer_client(authorizer):
+def get_transfer_client():
+    authorizer = get_authorizer(ACL_CREATION_SCOPE)
     return globus_sdk.TransferClient(authorizer=authorizer)
 
 def get_endpoints(transfer_client):

@@ -4,7 +4,7 @@ import json
 import os
 import time
 import getpass
-from .const import Constants
+from smrtlink.const import Constants
 
 class TokenManager:
     # token manager is a singleton which maintains an up-to-date token
